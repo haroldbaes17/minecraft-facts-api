@@ -3,7 +3,10 @@ package io.github.haroldbaes17.minecraftfacts.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.Instant;
 
@@ -12,7 +15,7 @@ import java.time.Instant;
             @Index(name = "idx_refresh_user", columnList = "user_id"),
             @Index(name = "idx_refresh_expires", columnList = "expiresAt")
         })
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class RefreshToken {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

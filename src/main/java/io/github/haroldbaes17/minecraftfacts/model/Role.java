@@ -4,11 +4,11 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 
 @Entity @Table(name = "roles",
         uniqueConstraints = @UniqueConstraint(name = "uk_roles_name", columnNames = "name"))
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Role {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

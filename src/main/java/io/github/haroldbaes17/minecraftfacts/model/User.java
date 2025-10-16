@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
+import lombok.*;
 
 import java.time.Instant;
 import java.util.HashSet;
@@ -15,7 +15,7 @@ import java.util.Set;
                 @UniqueConstraint(name = "uk_users_username", columnNames = "username"),
                 @UniqueConstraint(name = "uk_users_email", columnNames = "email")
         })
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -3,7 +3,10 @@ package io.github.haroldbaes17.minecraftfacts.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.URL;
 
 import java.time.Instant;
@@ -14,7 +17,7 @@ import java.util.Set;
                 @Index(name = "idx_facts_title", columnList = "title"),
                 @Index(name = "idx_facts_published", columnList = "published")
         })
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Fact {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -3,11 +3,14 @@ package io.github.haroldbaes17.minecraftfacts.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity @Table(name = "categories",
         uniqueConstraints = @UniqueConstraint(name = "uk_categories_slug", columnNames = "slug"))
-@Data
+@Data @NoArgsConstructor @AllArgsConstructor @Builder
 public class Category {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
