@@ -160,10 +160,30 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(EntityNotFoundException.class)
     public ResponseEntity<Object> handleNotFound(EntityNotFoundException ex, HttpServletRequest req) {
-        ProblemDetail pd = baseProblem(HttpStatus.NOT_FOUND, "Resource not found",
+        ProblemDetail pd = baseProblem(HttpStatus.NOT_FOUND, "Entity not found",
                 ex.getMessage() != null ? ex.getMessage() : "El recurso solicitado no existe.", req);
         pd.setProperty("errorCode", "ENTITY_NOT_FOUND");
         return wrap(pd);
+    }
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<Object> handleResourceNotFound(ResourceNotFoundException ex, HttpServletRequest req) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        pd.setTitle("Resource not found");
+        pd.setProperty("path", req.getRequestURI());
+        pd.setProperty("timestamp", OffsetDateTime.now().toString());
+        pd.setProperty("errorCode", "RESOURCE_NOT_FOUND");
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pd);
+    }
+
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<Object> handleDuplicate(DuplicateResourceException ex, HttpServletRequest req) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle("Duplicate resource");
+        pd.setProperty("path", req.getRequestURI());
+        pd.setProperty("timestamp", OffsetDateTime.now().toString());
+        pd.setProperty("errorCode", "DUPLICATE_RESOURCE");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(pd);
     }
 
     @ExceptionHandler(ConstraintViolationException.class) // para @Validated en parámetros (path/query)
