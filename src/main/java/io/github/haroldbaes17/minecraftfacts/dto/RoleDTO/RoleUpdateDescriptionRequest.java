@@ -1,4 +1,4 @@
-package io.github.haroldbaes17.minecraftfacts.dto;
+package io.github.haroldbaes17.minecraftfacts.dto.RoleDTO;
 
 import jakarta.validation.constraints.Size;
 

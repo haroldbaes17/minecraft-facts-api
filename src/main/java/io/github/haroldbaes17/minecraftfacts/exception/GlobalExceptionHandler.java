@@ -186,7 +186,27 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(pd);
     }
 
-    @ExceptionHandler(ConstraintViolationException.class) // para @Validated en parámetros (path/query)
+    @ExceptionHandler(RoleInUseException.class)
+    public ResponseEntity<Object> handleRoleUsed(RoleInUseException ex, HttpServletRequest req) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle("Role in use.");
+        pd.setProperty("path", req.getRequestURI());
+        pd.setProperty("timestamp", OffsetDateTime.now().toString());
+        pd.setProperty("errorCode", "ROLE_IN_USE");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(pd);
+    }
+
+    @ExceptionHandler(RoleNotDeletedException.class)
+    public ResponseEntity<Object> handleRoleNotDeleted(RoleNotDeletedException ex, HttpServletRequest req) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.CONFLICT, ex.getMessage());
+        pd.setTitle("Role is not deleted.");
+        pd.setProperty("path", req.getRequestURI());
+        pd.setProperty("timestamp", OffsetDateTime.now().toString());
+        pd.setProperty("errorCode", "ROLE_NOT_DELETED");
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(pd);
+    }
+
+    @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<Object> handleConstraintViolation(ConstraintViolationException ex, HttpServletRequest req) {
         Map<String, String> errors = ex.getConstraintViolations().stream()
                 .collect(Collectors.toMap(v -> v.getPropertyPath().toString(), v -> v.getMessage(), (a,b)->a, LinkedHashMap::new));

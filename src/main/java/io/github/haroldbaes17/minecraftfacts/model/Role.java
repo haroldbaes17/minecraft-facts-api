@@ -21,4 +21,7 @@ public class Role {
 
     @Size(max = 200)
     private String description;
+
+    @Column(nullable = false)
+    private boolean deleted = false;
 }

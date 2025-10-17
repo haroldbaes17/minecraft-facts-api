@@ -1,6 +1,7 @@
 package io.github.haroldbaes17.minecraftfacts.controller;
 
 import io.github.haroldbaes17.minecraftfacts.dto.*;
+import io.github.haroldbaes17.minecraftfacts.dto.RoleDTO.*;
 import io.github.haroldbaes17.minecraftfacts.model.Role;
 import io.github.haroldbaes17.minecraftfacts.service.RoleService;
 import jakarta.validation.Valid;
@@ -12,9 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.net.URI;
 import java.util.List;
 
 @RestController @RequestMapping("/roles")
@@ -25,21 +24,21 @@ public class RoleController {
 
     /* ========= Lectura / búsqueda ========= */
     @GetMapping("/findAll")
-    public ResponseEntity<List<Role>> findAll() {
-        List<Role> roles = roleService.findAll();
+    public ResponseEntity<List<RoleResponse>> findAll() {
+        List<RoleResponse> roles = roleService.findAll();
         return ResponseEntity.ok(roles);
     }
 
     @GetMapping("/findById/{id}")
-    public ResponseEntity<Role> findById(@PathVariable Long id) {
+    public ResponseEntity<RoleResponse> findById(@PathVariable Long id) {
         Role role = roleService.findById(id);
-        return ResponseEntity.ok(role);
+        return ResponseEntity.ok(RoleResponse.from(role));
     }
 
     @GetMapping("/findByName/{name}")
-    public ResponseEntity<Role> findByName(@PathVariable String name) {
-        Role role = roleService.findByName(name);
-        return ResponseEntity.ok(role);
+    public ResponseEntity<RoleResponse> findByName(@PathVariable String name) {
+        RoleResponse response = roleService.findByName(name);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/search")
@@ -98,6 +97,40 @@ public class RoleController {
     }
 
     /* ========= Eliminación / recuperación ========= */
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        roleService.delete(id);
+        return ResponseEntity.ok("Role has been deleted.");
+    }
 
+    @GetMapping("/listTrash")
+    public ResponseEntity<List<RoleResponse>> listTrash() {
+        List<RoleResponse> roles = roleService.listTrash();
+        return ResponseEntity.ok(roles);
+    }
 
+    @PostMapping("/restore/{id}")
+    public  ResponseEntity<RoleResponse> restore(@PathVariable Long id) {
+        RoleResponse updated = roleService.restore(id);
+        return ResponseEntity.ok(updated);
+    }
+
+    @PostMapping("/bulk/delete")
+    public ResponseEntity<BulkDeleteRolesResponse> bulkDelete(
+            @Valid @RequestBody BulkDeleteRolesRequest request) {
+        BulkDeleteRolesResponse response = roleService.bulkDelete(request);
+        return ResponseEntity.ok(response);
+    }
+    
+    @PostMapping("/bulk/restore")
+    public ResponseEntity<BulkRestoreRolesResponse> bulkRestore(
+            @Valid @RequestBody BulkRestoreRolesRequest request) {
+        BulkRestoreRolesResponse response = roleService.bulkRestore(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @DeleteMapping("/hardDelete/{id}")
+    public ResponseEntity<String> hardDelete(@PathVariable Long id) {
+        return ResponseEntity.ok(roleService.hardDelete(id));
+    }
 }
